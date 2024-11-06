@@ -1,0 +1,54 @@
+{
+  "name": "client",
+  "version": "1.0.0",
+  "description": "This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).",
+  "main": "index.js",
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "server:dev": "nodemon server.js",
+    "server:prod": "node server.js",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "proxy": "http://localhost:5100"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "ajv": "^8.17.1",
+    "ajv-keywords": "^5.1.0",
+    "axios": "^1.7.7",
+    "codemirror": "^5.65.18",
+    "mdb-react-ui-kit": "^9.0.0",
+    "react": "^18.3.1",
+    "react-avatar": "^5.0.3",
+    "react-bootstrap": "^2.10.5",
+    "react-dom": "^18.3.1",
+    "react-hook": "^0.0.1",
+    "react-hot-toast": "^2.4.1",
+    "react-router-dom": "^6.27.0",
+    "react-scripts": "^5.0.1",
+    "socket.io": "^4.8.0",
+    "socket.io-client": "^4.8.0",
+    "uuid": "^10.0.0",
+    "web-vitals": "^4.2.3"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}
