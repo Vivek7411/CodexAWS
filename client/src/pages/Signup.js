@@ -126,7 +126,7 @@ const SignUp = () => {
         e.preventDefault();
         try {
             // Replace 'localhost' with your EC2 public IP
-            const response = await axios.post('http://13.211.228.124:5100/signup', { email, password });
+            const response = await axios.post('https://13.211.228.124:443/signup', { email, password });
             localStorage.setItem('token', response.data.token); // Save token to localStorage
             navigate('/login'); // Navigate to the login page
         } catch (error) {
