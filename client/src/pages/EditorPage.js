@@ -71,15 +71,37 @@ const EditorPage = () => {
         };
     }, [location.state?.username, reactNavigator, roomId]);
 
+    // async function copyRoomId() {
+    //     try {
+    //         await navigator.clipboard.writeText(roomId);
+    //         toast.success('Room ID has been copied to your clipboard');
+    //     } catch (err) {
+    //         toast.error('Could not copy the Room ID');
+    //         console.error(err);
+    //     }
+    // }
+
+
     async function copyRoomId() {
         try {
             await navigator.clipboard.writeText(roomId);
             toast.success('Room ID has been copied to your clipboard');
         } catch (err) {
-            toast.error('Could not copy the Room ID');
+            toast.error('Could not copy the Room ID. You can copy it manually.');
             console.error(err);
+    
+            
+            const roomIdDisplay = document.getElementById('roomIdDisplay');
+            if (roomIdDisplay) {
+                roomIdDisplay.textContent = `Room ID: ${roomId} (You can copy it from here)`;
+                roomIdDisplay.style.display = 'block';  
+            }
         }
     }
+
+
+
+
 
     function leaveRoom() {
         reactNavigator('/');
@@ -122,6 +144,8 @@ const EditorPage = () => {
                 <button className="btn copyBtn" onClick={copyRoomId}>
                     Copy ROOM ID
                 </button>
+                {/* --------------------------------------------- */}
+                <div id="roomIdDisplay" style={{ display: 'none', marginTop: '10px', color: 'white' }}></div>
                 <button className="btn leaveBtn" onClick={leaveRoom}>
                     Leave
                 </button>

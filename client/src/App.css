@@ -810,3 +810,13 @@ body {
 .logoutBtn:hover {
   background-color: #ff1a1a;
 }
+
+/* 12-11-2024 */
+#roomIdDisplay {
+  font-size: 16px;
+  font-weight: bold;
+  background-color: #8AA065;
+  padding: 10px;
+  border: 1px solid #8AA065;
+  border-radius: 5px;
+}
