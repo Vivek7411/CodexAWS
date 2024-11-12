@@ -190,7 +190,7 @@ const Home = () => {
     };
 
     const joinRoom = () => {
-        if (!roomId || !username || !selectedLanguage) {
+        if (!roomId || !username) {
             toast.error('ROOM ID, username, and language are required');
             return;
         }
@@ -250,7 +250,7 @@ const Home = () => {
                         <button className="btn joinBtn" onClick={joinRoom}>
                             Join
                         </button>
-                        <select
+                        {/* <select
                             className="languageSelect"
                             value={selectedLanguage}
                             onChange={(e) => setSelectedLanguage(e.target.value)}
@@ -263,7 +263,7 @@ const Home = () => {
                                     {`${lang} (${version})`}
                                 </option>
                             ))}
-                        </select>
+                        </select> */}
                     </div>
                     <span className="createInfo">
                         If you don't have an invite then create &nbsp;
