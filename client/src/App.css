@@ -820,3 +820,24 @@ body {
   border: 1px solid #8AA065;
   border-radius: 5px;
 }
+
+
+
+
+/* 12-11-24*/
+
+.outputWrap {
+  position: relative;
+}
+
+.topRightCorner {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+
+.languageSelect {
+  padding: 5px;
+  border-radius: 4px;
+}
+
