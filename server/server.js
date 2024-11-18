@@ -128,6 +128,9 @@ const {v4 : uuidV4} = require('uuid')
 const { Server } = require('socket.io');
 const ACTIONS = require('./src/Actions');
 const verifyToken = require('./middleware/auth');
+const createRoomRoute = require('./routes/CreateRoom');
+const dashboardRouter = require('./routes/Dashboard');
+const saveCodeRoute = require('./routes/SaveCodeRoute');
 dotenv.config(); 
 
 const app = express(); 
@@ -138,8 +141,15 @@ const io = new Server(server);
 const port = process.env.PORT || 3100;
 
 app.use(cookie());
-app.use(cors());
+app.options('/api/save-code', cors({
+    origin: '*',
+    credentials: true,
+    allowedHeaders: ['Authorization', 'Content-Type'],
+    methods: ['OPTIONS', 'POST']
+}));
+
 app.use(bodyparser.json());
+app.use(express.json());
 // Serve static files from the React app
 // app.use(express.static(path.join(__dirname, 'client/build')));
 
@@ -158,32 +168,10 @@ app.get('*', (req, res) => {
 
 
 app.use('/', SignUpRouter);
-// app.use('/protected', ProtectedRoute)
 app.use('/', loginRouter);
-
-app.get('/dashboard', (req, res) => {
-    const token = req.cookies.jwt;
-    if (!token) {
-        return res.status(401).json({
-            message: 'Unauthorized access',
-        });
-    }
-    try {
-        // Verify the JWT token
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        return res.send(`Welcome to the dashboard, User ID: ${decoded.user.id}`);
-    } catch (err) {
-        return res.status(401).json({
-            message: 'Invalid token, access denied.',
-        });
-    }
-});
-
-app.post('/create-room', verifyToken, (req, res) => {
-    const roomId = uuidV4();
-    // Logic to create a room (this can include room creation code)
-    res.status(200).json({ message: 'Room created successfully', roomId});
-});
+app.use('/', dashboardRouter)
+app.use('/', createRoomRoute);
+app.use('/', saveCodeRoute);
 
 app.use(express.static('build'));
 app.use((req, res, next) => {
