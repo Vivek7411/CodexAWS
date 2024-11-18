@@ -155,7 +155,7 @@
 import React, { useState } from 'react';
 import { v4 as uuidV4 } from 'uuid';
 import toast from 'react-hot-toast';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { LANGUAGE_VERSIONS } from '../constants';
 
 const Home = () => {
@@ -279,7 +279,8 @@ const Home = () => {
             <footer>
                 <h4>
                     Built with 💛 &nbsp; by &nbsp;
-                    <a href="https://github.com/sumit45sagar">Team Codex</a>
+                    {/* <a href="https://github.com/sumit45sagar">Team Codex</a> */}
+                    <Link to="/ContributorsPage">Team Codex</Link>
                 </h4>
             </footer>
         </div>

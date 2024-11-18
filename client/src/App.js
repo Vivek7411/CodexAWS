@@ -3,7 +3,8 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import Home from './pages/Home';
 import EditorPage from './pages/EditorPage';
-import SignUp from './pages/Signup';  
+import SignUp from './pages/Signup'; 
+import ContributorsPage from './pages/contributer'; 
 import Login from './pages/Login';
 import ProtectedRoute from './components/ProtectedRoute';
 // import ProtectedRoute from './components/ProtectedRoute';
@@ -28,6 +29,15 @@ function App() {
                     <Route path="/" element={<Home />} />
                     <Route path="/signup" element={<SignUp />} />
                     <Route path='/login' element={<Login />} />
+
+                    <Route 
+                        path='/ContributorsPage' 
+                        element={
+                            <ContributorsPage />  
+                        } />
+
+ 
+
                     <Route
                         path="/editor/:roomId"
                         element={
