@@ -4,11 +4,12 @@ const Room = require('../model/Room');
 const verifyToken = require('../middleware/auth'); // Ensure auth middleware is imported
 
 saveCodeRoute.post('/save-code', verifyToken, async (req, res) => {
-    const { roomId, code } = req.body;
+    const { roomId, code, roomName } = req.body;
     const userId = req.user.id; // Retrieved from the verified token
 
     try {
-        const room = await Room.findOne({ roomId, hostId: userId });
+        const room = await Room.create({ roomId, hostId: userId, roomName });
+        console.log(room)
 
         if (!room) {
             return res.status(404).json({ error: "No valid room found or user unauthorized" });
@@ -21,6 +22,7 @@ saveCodeRoute.post('/save-code', verifyToken, async (req, res) => {
         console.error("Error saving code:", error);
         res.status(500).json({ error: "Error in saving code" });
     }
+    
 });
 
 module.exports = saveCodeRoute;
