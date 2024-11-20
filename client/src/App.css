@@ -163,14 +163,16 @@ footer a:hover {
   overflow-y: auto;
 }
 
-.clientsList {
+/* .clientsList {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   gap: 15px;
-}
+} */
 
-.client {
+
+
+/* .client {
   display: flex;
   align-items: center;
   flex-direction: column;
@@ -180,10 +182,83 @@ footer a:hover {
 
 .client:hover {
   transform: translateY(-4px);
+} */
+
+/* --------------------------------20-11-2024 */
+
+.clientsList {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* Two users per row */
+  gap: 20px; /* Space between items */
+  max-height: 300px; /* Limit the height */
+  overflow-y: auto; /* Enable scrolling if needed */
+  padding: 15px; /* Add padding around the grid */
+  background-color: #2c2c2c; /* Slightly lighter background for contrast */
+  border-radius: 10px; /* Rounded corners for the list container */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
 }
 
+.clientsList::-webkit-scrollbar {
+  width: 8px; /* Custom scrollbar width */
+}
+
+.clientsList::-webkit-scrollbar-thumb {
+  background-color: #555; /* Darker scrollbar */
+  border-radius: 4px; /* Rounded scrollbar */
+}
+
+.clientsList::-webkit-scrollbar-thumb:hover {
+  background-color: #444; /* Slightly lighter on hover */
+}
+
+/* Individual Client Item Styling */
+.client {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #3b3b3b; /* Dark card background */
+  border-radius: 10px; /* Rounded edges for cards */
+  padding: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15); /* Card shadow */
+  text-align: center;
+  transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.client:hover {
+  transform: scale(1.05); /* Slight scale-up on hover */
+  background-color: #4a4a4a; /* Lighter background on hover */
+}
+
+.client img {
+  width: 40px; /* Icon size */
+  height: 40px;
+  border-radius: 50%; /* Circular avatars */
+  margin-bottom: 5px;
+}
+
+.client span {
+  font-size: 14px;
+  font-weight: bold;
+  color: #fff; /* White text for usernames */
+}
+
+h3 {
+  color: #fff;
+  font-size: 18px;
+  margin-bottom: 15px;
+  text-align: center;
+  border-bottom: 1px solid #444;
+  padding-bottom: 10px;
+  padding-top: 10px;
+}
+
+
+/* --------------------------------------20-11-2024  */
+
+
 .userName {
-  margin-top: 10px;
+  margin-top: 5px;
 }
 
 .logo {
@@ -485,37 +560,6 @@ footer a:hover {
   overflow-y: auto;
 }
 
-.clientsList {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 15px;
-}
-
-.client {
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-  font-weight: bold;
-  transition: transform 0.3s;
-}
-
-.client:hover {
-  transform: translateY(-4px);
-}
-
-.userName {
-  margin-top: 10px;
-}
-
-.logo {
-  border-bottom: 1px solid #5B5B5B; 
-  padding-bottom: 10px;
-}
-
-.logoImage {
-  height: 60px;
-}
 
 .leaveBtn {
   width: 100%;
@@ -841,3 +885,64 @@ body {
   border-radius: 4px;
 }
 
+.downbtn {
+  border: none;
+  padding: 10px 16px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  background-color: #4caf50; /* Green background */
+  color: white; /* White text */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+.downbtn:hover {
+  background-color: #45a049; /* Darker green on hover */
+  transform: scale(1.05); /* Slightly enlarge on hover */
+}
+
+.downbtn:active {
+  background-color: #3e8e41; /* Even darker green when clicked */
+  transform: scale(1); /* Reset scale */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Reduced shadow */
+}
+
+/* -------------------custom input */
+
+.customInputWrap {
+  margin: 20px 0;
+  padding: 10px;
+  background-color: #3a3a3a; /* Dark background */
+  border: 1px solid #33354a; /* Subtle border */
+  /* border-radius: 8px; Rounded corners */
+  /* box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3); Shadow for depth */
+}
+
+.customInputWrap h4 {
+  margin-bottom: 10px;
+  font-size: 16px;
+  color: #f0f0f0; /* Light text color */
+  font-family: 'Courier New', monospace; /* Coding vibe */
+  font-weight: bold;
+}
+
+.customInputWrap textarea {
+  width: 100%;
+  background-color: #2b2b3b; /* Darker textarea background */
+  color: #d4d4dc; /* Light text */
+  border: 1px solid #44475a; /* Subtle border */
+  border-radius: 6px;
+  padding: 10px;
+  font-size: 14px;
+  font-family: 'Courier New', monospace; /* Coding aesthetic */
+  resize: none; /* Disable resizing */
+  transition: all 0.3s ease-in-out;
+}
+
+.customInputWrap textarea:focus {
+  border-color: #8be9fd; /* Highlight border on focus */
+  outline: none; /* Remove default outline */
+  box-shadow: 0 0 5px #8be9fd; /* Glow effect */
+}

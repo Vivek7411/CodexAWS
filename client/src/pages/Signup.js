@@ -114,8 +114,9 @@
 
 import React, { useState } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import '../App.css'; // Importing App.css for global styles
+import toast from 'react-hot-toast';
 
 const SignUp = () => {
     const [email, setEmail] = useState('');
@@ -131,6 +132,7 @@ const SignUp = () => {
             navigate('/login'); // Navigate to the login page
         } catch (error) {
             console.error('Error signing up:', error.response?.data?.message || error.message);
+            toast.error(error.response?.data?.message || error.message);//20-11-2024
         }
     };
 
@@ -163,8 +165,15 @@ const SignUp = () => {
                     Already have an account? Login, <a href="/login" className="signup-link">here</a>
                 </p>
             </div>
-            <footer className="login-footer">
+            {/* <footer className="login-footer">
                 <p>Built with 💛 &nbsp; by &nbsp; <a href="https://github.com/sumit45sagar">Team Codex</a>.</p>
+            </footer> */}
+            <footer>
+                <h4>
+                    Built with 💛 &nbsp; by &nbsp;
+                    {/* <a href="https://github.com/sumit45sagar">Team Codex</a> */}
+                    <Link to="/ContributorsPage">Team Codex</Link>
+                </h4>
             </footer>
         </div>
     );

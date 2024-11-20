@@ -98,8 +98,9 @@
 
 import React, { useState } from 'react';
 import axios from 'axios';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation, Link } from 'react-router-dom';
 import '../App.css'; // Importing App.css for global styles
+import toast from 'react-hot-toast';
 
 const Login = () => {
     const [email, setEmail] = useState('');
@@ -120,6 +121,7 @@ const Login = () => {
             navigate(from.pathname); // Navigate to the original page
         } catch (err) {
             console.log(err.response?.message || err.message || 'Error in logging in');
+            toast.error('Wrong Credentials');
         }
     };
 
@@ -153,8 +155,12 @@ const Login = () => {
                     Don't have an account? Sign up, <a href="/signup" className="signup-link">here</a>
                 </p>
             </div>
-            <footer className="login-footer">
-                <p>Built with 💛 &nbsp; by &nbsp; <a href="https://github.com/sumit45sagar">Team Codex</a>.</p>
+            <footer>
+                <h4>
+                    Built with 💛 &nbsp; by &nbsp;
+                    {/* <a href="https://github.com/sumit45sagar">Team Codex</a> */}
+                    <Link to="/ContributorsPage">Team Codex</Link>
+                </h4>
             </footer>
         </div>
     );

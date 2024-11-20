@@ -5,7 +5,7 @@ const API = axios.create({
   baseURL: "https://emkc.org/api/v2/piston",
 });
 
-export const executeCode = async (language, sourceCode) => {
+export const executeCode = async (language, sourceCode, input) => {
   const response = await API.post("/execute", {
     language: language,
     version: LANGUAGE_VERSIONS[language],
@@ -14,6 +14,9 @@ export const executeCode = async (language, sourceCode) => {
         content: sourceCode,
       },
     ],
+
+    //------------------input code
+    stdin: input,
   });
   return response.data;
 };
