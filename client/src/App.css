@@ -146,7 +146,6 @@ footer a:hover {
   display: flex;
   height: 100vh;
   overflow: hidden;
-  position : relative;
 }
 
 .aside {
@@ -265,15 +264,10 @@ h3 {
 .logo {
   border-bottom: 1px solid #5B5B5B; 
   padding-bottom: 10px;
-  display: flex;
-  align-items: center;
 }
 
 .logoImage {
   height: 60px;
-  /* width: 50px;  */
-  
-  margin-right: 10px; /* Spacing between the image and the button */
 }
 
 .leaveBtn {
@@ -952,34 +946,3 @@ body {
   outline: none; /* Remove default outline */
   box-shadow: 0 0 5px #8be9fd; /* Glow effect */
 }
-
-
-/* ------------------------------------20-11-2024 */
-.btn.toggleBtn {
-  position: absolute; /* Keep the button independent of other elements */
-  top: 20px; /* Adjust to position the button vertically */
-  left: 20px; /* Adjust to position the button horizontally */
-  background-color: #5a5a5a; /* Grey background */
-  color: white; /* White text */
-  border: none; /* Remove border */
-  width: 35px; /* Square button */
-  height: 35px; /* Square button */
-  border-radius: 3px; /* Subtle rounded corners */
-  font-size: 20px; /* Large font for the icon */
-  display: flex; /* Center the icon */
-  justify-content: center; /* Horizontal center */
-  align-items: center; /* Vertical center */
-  cursor: pointer; /* Pointer cursor on hover */
-  z-index: 1000; /* Ensure it stays on top of other elements */
-  transition: background-color 0.3s ease, transform 0.2s ease; /* Smooth effects */
-}
-
-.btn.toggleBtn:hover {
-  background-color: #3f3f3f; /* Darker grey on hover */
-}
-
-.btn.toggleBtn:active {
-  background-color: #2f2f2f; /* Even darker grey when clicked */
-  transform: scale(0.95); /* Slight shrink effect */
-}
-
