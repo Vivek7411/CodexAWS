@@ -252,6 +252,7 @@ const EditorPage = () => {
   const [clients, setClients] = useState([]);
   const [output, setOutput] = useState("");
   const [input, setinput] = useState(""); //------------20-11-2024
+  const [isAsideVisible, setIsAsideVisible] = useState(true);
   const [selectedLanguage, setSelectedLanguage] = useState(
     location.state?.language || "javascript"
   );
@@ -413,35 +414,80 @@ const EditorPage = () => {
     return <Navigate to="/" />;
   }
 
+  const toggleAside = () => {
+    setIsAsideVisible((prev) => !prev);
+  };
+
   return (
     <div className="mainWrap">
-      <div className="aside">
-        <div className="asideInner">
-          <div className="logo">
-            <img className="logoImage" src="/code-logo.png" alt="logo" />
-          </div>
-          <h3>Active Coders</h3>
-          <div className="clientsList">
-            {clients.map((client) => (
-              <Client key={client.socketId} username={client.username} />
-            ))}
-          </div>
-        </div>
+      {/* <button className="btn toggleBtn" onClick={toggleAside}>
+        {isAsideVisible ? "≡" : "☰"}
+      </button>
 
-        <button className="btn copyBtn" onClick={copyRoomId}>
-          Copy ROOM ID
-        </button>
-        <div
-          id="roomIdDisplay"
-          style={{ display: "none", marginTop: "10px", color: "white" }}
-        ></div>
-        <button className="btn leaveBtn" onClick={leaveRoom}>
-          Leave
-        </button>
-        <button className="btn runBtn" onClick={runCode}>
-          Run Code
-        </button>
+      {isAsideVisible && (
+        <div className="aside">
+          <div className="asideInner">
+            <div className="logo">
+              <img className="logoImage" src="/code-logo.png" alt="logo" />
+            </div>
+            <h3>Active Coders</h3>
+            <div className="clientsList">
+              {clients.map((client) => (
+                <Client key={client.socketId} username={client.username} />
+              ))}
+            </div>
+          </div>
+
+          <button className="btn copyBtn" onClick={copyRoomId}>
+            Copy ROOM ID
+          </button>
+          <div
+            id="roomIdDisplay"
+            style={{ display: "none", marginTop: "10px", color: "white" }}
+          ></div>
+          <button className="btn leaveBtn" onClick={leaveRoom}>
+            Leave
+          </button>
+          <button className="btn runBtn" onClick={runCode}>
+            Run Code
+          </button>
+        </div>
+      )} */}
+      <div className="container">
+  <button className="btn toggleBtn" onClick={toggleAside}>
+    {isAsideVisible ? "≡" : "☰"}
+  </button>
+
+  {isAsideVisible && (
+    <div className="aside">
+      <div className="asideInner">
+        <div className="logo">
+          <img className="logoImage" src="/code-logo.png" alt="logo" />
+        </div>
+        <h3>Active Coders</h3>
+        <div className="clientsList">
+          {clients.map((client) => (
+            <Client key={client.socketId} username={client.username} />
+          ))}
+        </div>
       </div>
+
+      <button className="btn copyBtn" onClick={copyRoomId}>
+        Copy ROOM ID
+      </button>
+      <div
+        id="roomIdDisplay"
+        style={{ display: "none", marginTop: "10px", color: "white" }}
+      ></div>
+      <button className="btn leaveBtn" onClick={leaveRoom}>
+        Leave
+      </button>
+      <button className="btn runBtn" onClick={runCode}>
+        Run Code
+      </button>
+    </div>
+  )}
+</div>
 
       <div className="editorOutputWrap">
         <div className="editorWrap">
@@ -480,15 +526,14 @@ const EditorPage = () => {
 
           {/* ------------------------------------------------20-11-2024 */}
           <div className="customInputWrap">
-          <h4>Custom Input:</h4>
-          <textarea
-            value={input}
-            onChange={(e) => setinput(e.target.value)}
-            placeholder="Enter custom input"
-            rows={5}
-          ></textarea>
-        </div>
-
+            <h4>Custom Input:</h4>
+            <textarea
+              value={input}
+              onChange={(e) => setinput(e.target.value)}
+              placeholder="Enter custom input"
+              rows={5}
+            ></textarea>
+          </div>
         </div>
       </div>
     </div>
