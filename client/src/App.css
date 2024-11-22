@@ -571,6 +571,25 @@ footer a:hover {
   margin-top: 20px;
 }
 
+.runBtn:active {
+  transform: scale(1.05);
+}
+
+.saveBtn {
+  width: 100%;
+  margin-top: 20px;
+  transition: transform 0.3s ease-in-out;
+}
+
+.saveBtn:hover{
+  transform: scale(1.1);
+  background-color: #bebcbc;
+}
+
+.saveBtn:active{
+  transform: scale(1.05);
+}
+
 .CodeMirror {
   flex: 1;
   font-size: 16px;
