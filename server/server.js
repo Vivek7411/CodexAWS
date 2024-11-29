@@ -33,17 +33,11 @@ app.use(cors({
     methods: ['GET', 'POST', 'PUT']
 }));
 
-app.options('/save-code', cors()); // Handle preflight requests for /save-code
+// app.options('/save-code', cors()); // Handle preflight requests for /save-code
 
 
 app.use(bodyparser.json());
 app.use(express.json());
-// Serve static files from the React app
-// app.use(express.static(path.join(__dirname, 'client/build')));
-
-// app.get('*', (req, res) => {
-//   res.sendFile(path.join(__dirname, 'client/build', 'index.html'));
-// });
 
 
 // i viv is correcting the path now 

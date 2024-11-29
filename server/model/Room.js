@@ -5,15 +5,6 @@ const RoomSchema = new mongoose.Schema({
         type: String, 
         required: true
     },
-    hostId: {
-        type: mongoose.Schema.Types.ObjectId, 
-        ref: 'User', 
-        required: true
-    }, 
-    roomName: {
-        type: String, 
-        required: true
-    },
     code: {
         type: String, 
         default: ''

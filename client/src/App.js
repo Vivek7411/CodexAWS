@@ -42,7 +42,7 @@ function App() {
                         path="/editor/:roomId"
                         element={
                             <ProtectedRoute>
-                                <EditorPage />
+                                <EditorPage/>
                             </ProtectedRoute>
                         }
                     />

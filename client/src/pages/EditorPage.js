@@ -13,7 +13,7 @@ const EditorPage = () => {
     const socketRef = useRef(null);
     const codeRef = useRef(''); 
     const location = useLocation();
-    const { roomId } = useParams();
+    const { roomId} = useParams();
     const reactNavigator = useNavigate();
     const [clients, setClients] = useState([]);
     const [output, setOutput] = useState('');
@@ -115,18 +115,20 @@ const EditorPage = () => {
         try {
             const token = localStorage.getItem('token')
              
+            if(!token) {
+                reactNavigator('/login');
+            }
+            console.log(roomId, code)
             
             const response = await axios.post('http://localhost:5100/save-code', {
                 roomId,
-
-                code,
+                code
             },
             {
                 headers:{
                 Authorization: `Bearer ${token}`,
             }
-        }
-        );
+        });
             toast.success(response.data.message || 'Code saved successfully!');
         } catch (error) {
             toast.error('Failed to save code');
