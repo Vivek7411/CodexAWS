@@ -112,7 +112,7 @@ footer a:hover {
 }
 
 .joinBtn, .leaveBtn, .runBtn {
-  background: #A1C181; 
+  background: #4caf50; 
   color: #FFFFFF; 
   width: 120px;
 }
@@ -128,7 +128,7 @@ footer a:hover {
 }
 
 .createNewBtn {
-  color: #A1C181;
+  color: #4caf50;
   background: none; 
   border: none; 
   text-decoration: none;
@@ -509,7 +509,7 @@ footer a:hover {
 }
 
 .joinBtn, .leaveBtn, .runBtn {
-  background: #A1C181; 
+  background: #4caf50; 
   color: #FFFFFF; 
   width: 120px;
 }
@@ -525,7 +525,7 @@ footer a:hover {
 }
 
 .createNewBtn {
-  color: #A1C181;
+  color: #4caf50;
   background: none; 
   border: none; 
   text-decoration: none;
@@ -569,6 +569,25 @@ footer a:hover {
 .runBtn {
   width: 100%;
   margin-top: 20px;
+}
+
+.runBtn:active {
+  transform: scale(1.05);
+}
+
+.saveBtn {
+  width: 100%;
+  margin-top: 20px;
+  transition: transform 0.3s ease-in-out;
+}
+
+.saveBtn:hover{
+  transform: scale(1.1);
+  background-color: #bebcbc;
+}
+
+.saveBtn:active{
+  transform: scale(1.05);
 }
 
 .CodeMirror {
@@ -762,7 +781,7 @@ body {
 }
 
 .login-btn {
-  background-color: #A1C181;
+  background-color: #4caf50;
   color: #FFFFFF;
   padding: 14px;
   border: none;
@@ -947,6 +966,22 @@ body {
   box-shadow: 0 0 5px #8be9fd; /* Glow effect */
 }
 
+
+/* -------------------spinner*/
+.spinner {
+  width: 50px;
+  height: 50px;
+  border: 6px solid #f3f3f3;
+  border-top: 6px solid #3e8e41;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: auto;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
 
 /* tying to handel responsiveness     29-nov-2024*/
 
