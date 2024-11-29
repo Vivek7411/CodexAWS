@@ -103,6 +103,12 @@ const EditorPage = () => {
     } catch (err) {
       toast.error("Could not copy the Room ID. You can copy it manually.");
       console.error(err);
+
+      const roomIdDisplay = document.getElementById("roomIdDisplay");
+      if (roomIdDisplay) {
+        roomIdDisplay.textContent = `Room ID: ${roomId} (You can copy it from here)`;
+        roomIdDisplay.style.display = "block";
+      }
     }
   }
   function leaveRoom() {

@@ -992,7 +992,7 @@ body {
 
 /* Style for the toggle aside panel button */
 .toggleAsideBtn {
-  background-color: #1c87c9; /* Same blue as the download button */
+  background-color: #4caf50; /* Same blue as the download button */
   color: white; /* Text color */
   border: none; /* Remove border */
   padding: 8px 12px; /* Same padding as download button */
@@ -1013,7 +1013,7 @@ body {
 
 /* Hover effect */
 .toggleAsideBtn:hover {
-  background-color: #155d8a; /* Darker shade of blue for hover */
+  background-color: #45a049; /* Darker shade of blue for hover */
 }
 
 /* Responsive visibility for small screens */
