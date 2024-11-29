@@ -1,8 +1,12 @@
 import React, { useState, } from 'react';
 import axios from 'axios';
+
 import toast from 'react-hot-toast';
-import { useNavigate, useLocation } from 'react-router-dom';
+
+import { useNavigate, useLocation, Link } from 'react-router-dom';
+
 import '../App.css'; // Importing App.css for global styles
+
 
 const Login = () => {
     const [email, setEmail] = useState('');
@@ -24,7 +28,10 @@ const Login = () => {
             toast.success('Logged in succesfully')
         } catch (err) {
             console.log(err.response?.message || err.message || 'Error in logging in');
+
             toast.error('Invalid Credentials')
+
+
         }
     };
 
@@ -58,8 +65,12 @@ const Login = () => {
                     Don't have an account? Sign up, <a href="/signup" className="signup-link">here</a>
                 </p>
             </div>
-            <footer className="login-footer">
-                <p>Built with 💛 &nbsp; by &nbsp; <a href="https://github.com/sumit45sagar">Team Codex</a>.</p>
+            <footer>
+                <h4>
+                    Built with 💛 &nbsp; by &nbsp;
+                    {/* <a href="https://github.com/sumit45sagar">Team Codex</a> */}
+                    <Link to="/ContributorsPage">Team Codex</Link>
+                </h4>
             </footer>
         </div>
     );
