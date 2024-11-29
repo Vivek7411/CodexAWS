@@ -217,22 +217,33 @@
 
 // export default EditorPage;
 
+
+
+
+
+
+
+
+// 2nd 29-11-2024
+
+
+
+
+
+
+
+
+
 import React, { useState, useRef, useEffect } from "react";
 import toast from "react-hot-toast";
 import ACTIONS from "../Actions";
 import Client from "../components/Client";
 import Editor from "../components/Editor";
 import { initSocket } from "../socket";
-import {
-  useLocation,
-  useNavigate,
-  Navigate,
-  useParams,
-} from "react-router-dom";
+import { useLocation, useNavigate, Navigate, useParams } from "react-router-dom";
 import { executeCode } from "../api";
 import { LANGUAGE_VERSIONS } from "../constants.js";
 
-//-------------------------------------------20-11-2024
 const fileExtensionMapping = {
   cpp: "cpp",
   java: "java",
@@ -251,10 +262,11 @@ const EditorPage = () => {
   const reactNavigator = useNavigate();
   const [clients, setClients] = useState([]);
   const [output, setOutput] = useState("");
-  const [input, setinput] = useState(""); //------------20-11-2024
+  const [input, setinput] = useState("");
   const [selectedLanguage, setSelectedLanguage] = useState(
     location.state?.language || "javascript"
   );
+  const [isPanelVisible, setIsPanelVisible] = useState(true); // Toggle state for aside panel
 
   useEffect(() => {
     const init = async () => {
@@ -296,29 +308,6 @@ const EditorPage = () => {
             prev.filter((client) => client.socketId !== socketId)
           );
         });
-
-        // Listen for cursor position updates from other users
-        socketRef.current.on(
-          ACTIONS.CURSOR_UPDATE,
-          ({ username, position }) => {
-            // Update cursor positions in the editor
-            const existingClient = document.getElementById(username);
-            if (existingClient) {
-              existingClient.style.top = position.top + "px";
-              existingClient.style.left = position.left + "px";
-            } else {
-              // Create new cursor for this user
-              const cursorElement = document.createElement("div");
-              cursorElement.id = username;
-              cursorElement.classList.add("cursor");
-              cursorElement.style.top = position.top + "px";
-              cursorElement.style.left = position.left + "px";
-              cursorElement.style.position = "absolute";
-              cursorElement.innerText = username.charAt(0); // Show the first letter of the username
-              document.querySelector(".editorWrap").appendChild(cursorElement);
-            }
-          }
-        );
       } catch (error) {
         console.error("Socket initialization failed:", error);
         toast.error("Failed to initialize socket.");
@@ -332,30 +321,9 @@ const EditorPage = () => {
         socketRef.current.disconnect();
         socketRef.current.off(ACTIONS.JOINED);
         socketRef.current.off(ACTIONS.DISCONNECTED);
-        socketRef.current.off(ACTIONS.CURSOR_UPDATE); // Cleanup event listener
       }
     };
   }, [location.state?.username, reactNavigator, roomId]);
-
-  // Handle cursor movement
-  // const handleCursorMove = (event) => {
-  //   const position = {
-  //     top: event.clientY,
-  //     left: event.clientX,
-  //   };
-
-  //   socketRef.current.emit(ACTIONS.CURSOR_UPDATE, {
-  //     username: location.state?.username,
-  //     position,
-  //   });
-  // };
-
-  // useEffect(() => {
-  //   window.addEventListener("mousemove", handleCursorMove);
-  //   return () => {
-  //     window.removeEventListener("mousemove", handleCursorMove);
-  //   };
-  // }, []);
 
   async function copyRoomId() {
     try {
@@ -393,7 +361,6 @@ const EditorPage = () => {
     }
   };
 
-  //--------------------------------------------------------------------20-11-2024
   const exportCode = () => {
     const codeVal = codeRef.current?.trim();
     if (!codeVal) {
@@ -407,7 +374,10 @@ const EditorPage = () => {
     codelink.download = `code.${fileExtensionMapping[selectedLanguage]}`;
     codelink.click();
   };
-  //----------------------------------------------------------------------
+
+  const toggleAsidePanel = () => {
+    setIsPanelVisible((prev) => !prev);
+  };
 
   if (!location.state) {
     return <Navigate to="/" />;
@@ -415,36 +385,45 @@ const EditorPage = () => {
 
   return (
     <div className="mainWrap">
-      <div className="aside">
-        <div className="asideInner">
-          <div className="logo">
-            <img className="logoImage" src="/code-logo.png" alt="logo" />
+      {isPanelVisible && (
+        <div className="aside">
+          <div className="asideInner">
+            <div className="logo">
+              <img className="logoImage" src="/code-logo.png" alt="logo" />
+            </div>
+            <h3>Active Coders</h3>
+            <div className="clientsList">
+              {clients.map((client) => (
+                <Client key={client.socketId} username={client.username} />
+              ))}
+            </div>
           </div>
-          <h3>Active Coders</h3>
-          <div className="clientsList">
-            {clients.map((client) => (
-              <Client key={client.socketId} username={client.username} />
-            ))}
-          </div>
-        </div>
 
-        <button className="btn copyBtn" onClick={copyRoomId}>
-          Copy ROOM ID
-        </button>
-        <div
-          id="roomIdDisplay"
-          style={{ display: "none", marginTop: "10px", color: "white" }}
-        ></div>
-        <button className="btn leaveBtn" onClick={leaveRoom}>
-          Leave
-        </button>
-        <button className="btn runBtn" onClick={runCode}>
-          Run Code
-        </button>
-      </div>
+          <button className="btn copyBtn" onClick={copyRoomId}>
+            Copy ROOM ID
+          </button>
+          <div
+            id="roomIdDisplay"
+            style={{ display: "none", marginTop: "10px", color: "white" }}
+          ></div>
+          <button className="btn leaveBtn" onClick={leaveRoom}>
+            Leave
+          </button>
+          <button className="btn runBtn" onClick={runCode}>
+            Run Code
+          </button>
+        </div>
+      )}
 
       <div className="editorOutputWrap">
         <div className="editorWrap">
+          <button className="toggleAsideBtn" onClick={toggleAsidePanel}>
+            <div class="hamburger">
+              <div class="hamburger-line"></div>
+              <div class="hamburger-line"></div>
+              <div class="hamburger-line"></div>
+            </div>
+          </button>
           <Editor
             socketRef={socketRef}
             roomId={roomId}
@@ -477,18 +456,15 @@ const EditorPage = () => {
           </div>
           <h4>Output:</h4>
           <pre>{output || "No output yet"}</pre>
-
-          {/* ------------------------------------------------20-11-2024 */}
           <div className="customInputWrap">
-          <h4>Custom Input:</h4>
-          <textarea
-            value={input}
-            onChange={(e) => setinput(e.target.value)}
-            placeholder="Enter custom input"
-            rows={5}
-          ></textarea>
-        </div>
-
+            <h4>Custom Input:</h4>
+            <textarea
+              value={input}
+              onChange={(e) => setinput(e.target.value)}
+              placeholder="Enter custom input"
+              rows={5}
+            ></textarea>
+          </div>
         </div>
       </div>
     </div>
@@ -496,3 +472,14 @@ const EditorPage = () => {
 };
 
 export default EditorPage;
+
+
+
+
+
+
+
+
+
+
+

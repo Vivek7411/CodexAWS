@@ -946,3 +946,60 @@ body {
   outline: none; /* Remove default outline */
   box-shadow: 0 0 5px #8be9fd; /* Glow effect */
 }
+
+
+/* tying to handel responsiveness     29-nov-2024*/
+
+
+
+
+
+
+/* Style for the toggle aside panel button */
+.toggleAsideBtn {
+  background-color: #1c87c9; /* Same blue as the download button */
+  color: white; /* Text color */
+  border: none; /* Remove border */
+  padding: 8px 12px; /* Same padding as download button */
+  font-size: 14px; /* Font size to match download button */
+  border-radius: 4px; /* Rounded corners */
+  cursor: pointer; /* Pointer on hover */
+  transition: background-color 0.3s ease; /* Smooth transition for hover effect */
+
+  /* Positioning for top-right placement */
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 10; /* Ensure it's on top of other elements */
+
+  /* Hide the button by default */
+  display: none;
+}
+
+/* Hover effect */
+.toggleAsideBtn:hover {
+  background-color: #155d8a; /* Darker shade of blue for hover */
+}
+
+/* Responsive visibility for small screens */
+@media (max-width: 768px) {
+  .toggleAsideBtn {
+    display: block; /* Make it visible only on small screens */
+  }
+}
+
+
+.hamburger {
+  width: 25px;
+  height: 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.hamburger-line {
+  background-color: #000;
+  height: 5px;
+  width: 100%;
+  border-radius: 5px;
+}
