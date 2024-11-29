@@ -173,8 +173,12 @@ const EditorPage = () => {
           </div>
 
           <button className="btn copyBtn" onClick={copyRoomId}>
-            Copy ROOM ID
-          </button>
+          Copy ROOM ID
+        </button>
+        <div
+          id="roomIdDisplay"
+          style={{ display: "none", marginTop: "10px", color: "white" }}
+        ></div>
           <button className="btn leaveBtn" onClick={leaveRoom}>
             Leave
           </button>
