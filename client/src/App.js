@@ -5,6 +5,7 @@ import Home from './pages/Home';
 import EditorPage from './pages/EditorPage';
 import SignUp from './pages/Signup'; 
 import ContributorsPage from './pages/contributer'; 
+import Dashboard from './pages/Dashboard'; 
 import Login from './pages/Login';
 import ProtectedRoute from './components/ProtectedRoute';
 // import ProtectedRoute from './components/ProtectedRoute';
@@ -35,7 +36,7 @@ function App() {
                         element={
                             <ContributorsPage />  
                         } />
-
+                    <Route path="/dashboard" element={<Dashboard />} />
  
 
                     <Route
