@@ -57,6 +57,7 @@ export default function EditorPage() {
   const location = useLocation();
   const { roomId } = useParams();
   const reactNavigator = useNavigate();
+  const previousCodeRef = useRef("");
 
   const [isDarkMode, setIsDarkMode] = useState(true);
   const [isRunning, setIsRunning] = useState(false);
@@ -174,20 +175,51 @@ export default function EditorPage() {
     }, 300); // 300ms debounce
   }, []);
 
+
   const logChange = (code, username) => {
     if (!code || !username) {
       console.warn("Invalid log entry:", { code, username });
       return;
     }
-
-    setLogs((prevLogs) => [
-      ...prevLogs,
-      { code, username, timestamp: Date.now() },
-    ]);
-    console.log("Code changed by", username);
+  
+    const prevCode = previousCodeRef.current;
+    previousCodeRef.current = code;
+  
+    if (code.trim() === "") {
+      setLogs((prevLogs) => [
+        ...prevLogs,
+        { code: "Entire code erased", fullCode: prevCode, username, timestamp: Date.now() },
+      ]);
+      console.log("Entire code erased by", username);
+      return;
+    }
+  
+    const prevLines = prevCode.split("\n");
+    const newLines = code.split("\n");
+  
+    let changedLines = [];
+  
+    const maxLines = Math.max(prevLines.length, newLines.length);
+    for (let i = 0; i < maxLines; i++) {
+      if (prevLines[i] !== newLines[i]) {
+        changedLines.push(`Line ${i + 1}: ${newLines[i] || "[deleted]"}`);
+      }
+    }
+  
+    if (changedLines.length > 0) {
+      setLogs((prevLogs) => [
+        ...prevLogs,
+        {
+          code: changedLines.join("\n"),
+          username,
+          timestamp: Date.now(),
+        },
+      ]);
+      console.log("Significant code change by", username);
+    }
   };
-
-  const toggleLogs = () => setShowLogs(!showLogs);
+  
+  const toggleLogs = () => setShowLogs((prev) => !prev);
 
   // get-previous-code from mongoDB
   const getPreviousCode = async () => {
@@ -326,7 +358,10 @@ export default function EditorPage() {
       <header className="border-b border-gray-800 p-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-4">
-            <img src={logo} alt="Codex Logo" className="h-9 w-11" />
+            <img src={logo} alt="Codex Logo" className="h-9 w-11" 
+             onClick={() => reactNavigator("/")}
+             style={{ cursor: "pointer" }}
+            />
             <h1 className="text-xl font-bold">CODEX</h1>
           </div>
           <div className="flex items-center space-x-4">
