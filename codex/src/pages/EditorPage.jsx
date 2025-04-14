@@ -308,7 +308,7 @@ export default function EditorPage() {
 
   // Function to clear the editor content
   const clearEditorContent = () => {
-    if (yourPermission === "owner") {
+    if (yourPermission === "owner" || yourPermission == "edit") {
       codeRef.current = ""; // Clear the reference value
       socketRef.current.emit(ACTIONS.SYNC_CODE, {
         // code: "",

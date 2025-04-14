@@ -18,13 +18,12 @@ saveCodeRoute.post("/save-code", verifyToken, async (req, res) => {
       return res.status(404).json({ error: "Room not found" });
     }
 
-    console.log(room);
-
     const userId = req.user._id.toString();
     const isHost = room.userId.toString() === userId;
-    const hasEditPermission = room.permissions?.some(
-      (perm) => perm.user.toString() === userId && perm.access === "edit"
-    );
+
+    const hasEditPermission = room.users?.some((user) => {
+      return user.userId.toString() === userId && user.permission === "edit";
+    });
 
     if (!isHost && !hasEditPermission) {
       return res
