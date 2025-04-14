@@ -1,14 +1,53 @@
-import React from 'react';
+import React from "react";
 
-const Client = ({ username }) => {
-    return (
-        <div className="flex items-center space-x-2">
-            <div className="w-8 h-8 rounded-full bg-green-500 flex items-center justify-center text-black font-bold mb-1">
-                {username.charAt(0).toUpperCase()}
-            </div>
-            <span className="text-sm">{username}</span>
-        </div>
-    );
-};
+export default function Client({
+  username,
+  permission,
+  isYou,
+  socketId,
+  currentUserPermission,
+  onChangePermission,
+}) {
+  // Only the owner can change others' permissions
+  const canChange = currentUserPermission === "owner" && !isYou;
 
-export default Client;
+  const getRoleLabel = (perm) => {
+    switch (perm) {
+      case "owner":
+        return "Owner";
+      case "edit":
+        return "Editor";
+      default:
+        return "Viewer";
+    }
+  };
+
+  const getNextPermission = (perm) => {
+    // Cycle between read <-> edit (not owner)
+    return perm === "edit" ? "read" : "edit";
+  };
+
+  return (
+    <div className="client flex items-center justify-between bg-[#2c2c2c] p-3 rounded-lg mb-2 text-white">
+      <div>
+        <span className="font-semibold">
+          {username} {isYou && "(You)"}
+        </span>
+        <span className="ml-2 text-sm text-gray-400">
+          {getRoleLabel(permission)}
+        </span>
+      </div>
+
+      {canChange && permission !== "owner" && (
+        <button
+          className="bg-emerald-600 px-2 py-1 rounded text-sm hover:bg-emerald-700"
+          onClick={() =>
+            onChangePermission(socketId, getNextPermission(permission))
+          }
+        >
+          Make {getRoleLabel(getNextPermission(permission))}
+        </button>
+      )}
+    </div>
+  );
+}

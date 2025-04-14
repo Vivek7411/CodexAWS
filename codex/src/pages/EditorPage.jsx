@@ -11,11 +11,8 @@ import logo from "../assets/code-logo.png";
 import {
   Moon,
   Sun,
-  Settings,
-  Users,
   Share2,
   Code2,
-  Plus,
   Save,
   Layout,
   Download,
@@ -66,18 +63,11 @@ export default function EditorPage() {
   const [output, setOutput] = useState("");
   const [logs, setLogs] = useState([]);
   const [showLogs, setShowLogs] = useState(false);
+  const [yourPermission, setYourPermission] = useState("read");
   const [showRoomId, setShowRoomId] = useState(false);
   const [selectedLanguage, setSelectedLanguage] = useState(
     location.state?.language || "javascript"
   );
-
-  const languages = [
-    { value: "javascript", label: "JavaScript (18.15.0)" },
-    { value: "python", label: "Python (3.10.0)" },
-    { value: "java", label: "Java (15.0.2)" },
-    { value: "csharp", label: "C# (6.12.0)" },
-    { value: "cpp", label: "C++ (10.2.0)" },
-  ];
 
   const fileExtensionMapping = {
     cpp: "cpp",
@@ -99,6 +89,14 @@ export default function EditorPage() {
     cpp: "10.2.0",
   };
 
+  const handleChangePermission = (targetSocketId, newPermission) => {
+    socketRef.current.emit(ACTIONS.CHANGE_PERMISSION, {
+      roomId,
+      targetSocketId,
+      newPermission,
+    });
+  };
+
   useEffect(() => {
     const init = async () => {
       try {
@@ -116,11 +114,23 @@ export default function EditorPage() {
         socketRef.current.emit(ACTIONS.JOIN, {
           roomId,
           username: location.state?.username,
+          userId: location.state?.userId,
         });
 
         socketRef.current.on(ACTIONS.SYNC_CODE, ({ code, username }) => {
           console.log("Code synced:", code, "by", username);
           logChange(code, username || "Anonymous");
+        });
+
+        socketRef.current.on(ACTIONS.UPDATE_PERMISSIONS, ({ clients }) => {
+          setClients(clients);
+          // Get your permission from the clients list
+          const you = clients.find(
+            (client) => client.socketId === socketRef.current.id
+          );
+          if (you) {
+            setYourPermission(you.permission);
+          }
         });
 
         socketRef.current.on(
@@ -129,7 +139,17 @@ export default function EditorPage() {
             if (username !== location.state?.username) {
               toast.success(`${username} joined the room.`);
             }
+
             setClients(clients);
+
+            // Get your permission from the clients list
+            const you = clients.find(
+              (client) => client.socketId === socketRef.current.id
+            );
+            if (you) {
+              setYourPermission(you.permission);
+            }
+
             socketRef.current.emit(ACTIONS.SYNC_CODE, {
               code: codeRef.current || "",
               socketId,
@@ -158,6 +178,7 @@ export default function EditorPage() {
         socketRef.current.disconnect();
         socketRef.current.off(ACTIONS.JOINED);
         socketRef.current.off(ACTIONS.DISCONNECTED);
+        socketRef.current.off(ACTIONS.UPDATE_PERMISSIONS);
       }
     };
   }, [roomId, reactNavigator, location.state?.username]);
@@ -175,37 +196,41 @@ export default function EditorPage() {
     }, 300); // 300ms debounce
   }, []);
 
-
   const logChange = (code, username) => {
     if (!code || !username) {
       console.warn("Invalid log entry:", { code, username });
       return;
     }
-  
+
     const prevCode = previousCodeRef.current;
     previousCodeRef.current = code;
-  
+
     if (code.trim() === "") {
       setLogs((prevLogs) => [
         ...prevLogs,
-        { code: "Entire code erased", fullCode: prevCode, username, timestamp: Date.now() },
+        {
+          code: "Entire code erased",
+          fullCode: prevCode,
+          username,
+          timestamp: Date.now(),
+        },
       ]);
       console.log("Entire code erased by", username);
       return;
     }
-  
+
     const prevLines = prevCode.split("\n");
     const newLines = code.split("\n");
-  
+
     let changedLines = [];
-  
+
     const maxLines = Math.max(prevLines.length, newLines.length);
     for (let i = 0; i < maxLines; i++) {
       if (prevLines[i] !== newLines[i]) {
         changedLines.push(`Line ${i + 1}: ${newLines[i] || "[deleted]"}`);
       }
     }
-  
+
     if (changedLines.length > 0) {
       setLogs((prevLogs) => [
         ...prevLogs,
@@ -218,7 +243,7 @@ export default function EditorPage() {
       console.log("Significant code change by", username);
     }
   };
-  
+
   const toggleLogs = () => setShowLogs((prev) => !prev);
 
   // get-previous-code from mongoDB
@@ -274,25 +299,24 @@ export default function EditorPage() {
           },
         }
       );
-      toast.success(
-        response.data.message || "Code saved successfully! For room : ",
-        roomId
-      );
+      toast.success(response?.data?.message, roomId);
     } catch (error) {
-      toast.error("Failed to save code");
+      toast.error(error?.response?.data.message || "Failed to save code");
       console.error("Save code error:", error);
     }
   };
 
   // Function to clear the editor content
   const clearEditorContent = () => {
-    codeRef.current = ""; // Clear the reference value
-    socketRef.current.emit(ACTIONS.SYNC_CODE, {
-      // code: "",
-      code: debounceEmitCodeChange(""),
-      socketId: socketRef.current.id,
-    }); // Notify other clients in the room
-    toast.success("Editor content cleared");
+    if (yourPermission === "owner") {
+      codeRef.current = ""; // Clear the reference value
+      socketRef.current.emit(ACTIONS.SYNC_CODE, {
+        // code: "",
+        code: debounceEmitCodeChange(""),
+        socketId: socketRef.current.id,
+      }); // Notify other clients in the room
+      toast.success("Editor content cleared");
+    } else toast.error("You do not have permission to clear this code.");
   };
 
   const runCode = async () => {
@@ -358,9 +382,12 @@ export default function EditorPage() {
       <header className="border-b border-gray-800 p-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-4">
-            <img src={logo} alt="Codex Logo" className="h-9 w-11" 
-             onClick={() => reactNavigator("/")}
-             style={{ cursor: "pointer" }}
+            <img
+              src={logo}
+              alt="Codex Logo"
+              className="h-9 w-11"
+              onClick={() => reactNavigator("/")}
+              style={{ cursor: "pointer" }}
             />
             <h1 className="text-xl font-bold">CODEX</h1>
           </div>
@@ -393,23 +420,19 @@ export default function EditorPage() {
                 Active Coders
               </h2>
               <div className="clientsList">
-                {clients
-                  .filter(
-                    (client, index, self) =>
-                      index ===
-                      self.findIndex((c) => c.socketId === client.socketId)
-                  )
-                  .map((client) => (
-                    <Client key={client.socketId} username={client.username} />
-                  ))}
+                {clients.map((client) => (
+                  <Client
+                    key={client.socketId}
+                    username={client.username}
+                    permission={client.permission}
+                    isYou={client.socketId === socketRef.current.id}
+                    socketId={client.socketId}
+                    currentUserPermission={yourPermission}
+                    onChangePermission={handleChangePermission}
+                  />
+                ))}
               </div>
             </div>
-            {/* <Button
-              className="w-full bg-gray-800 hover:bg-gray-700 text-white"
-              onClick={() => {}}
-            >
-              Previous Collaborations
-            </Button> */}
             <Button
               className="w-full bg-gray-800 hover:bg-gray-700 text-white"
               onClick={copyRoomId}
@@ -452,19 +475,15 @@ export default function EditorPage() {
               />
             </div>
           </div>
-
-         
-
-    
-            <Editor
-              socketRef={socketRef}
-              roomId={roomId}
-              onCodeChange={(code) => {
-                codeRef.current = code;
-                logChange(code, location.state?.username || "Anonymous");
-              }}
-            />
-        
+          <Editor
+            socketRef={socketRef}
+            roomId={roomId}
+            onCodeChange={(code) => {
+              codeRef.current = code;
+              logChange(code, location.state?.username || "Anonymous");
+            }}
+            permission={yourPermission}
+          />
         </div>
 
         {/* Code Change Logs Modal */}
@@ -547,8 +566,8 @@ export default function EditorPage() {
   );
 }
 
-
- {/* <Editor
+{
+  /* <Editor
             socketRef={socketRef}
             roomId={roomId}
             onCodeChange={(code) => {
@@ -556,4 +575,5 @@ export default function EditorPage() {
               debounceEmitCodeChange(code);
               logChange(code, location.state?.username || "Anonymous");
             }}
-          /> */}
+          /> */
+}

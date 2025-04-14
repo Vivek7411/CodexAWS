@@ -5,12 +5,12 @@ import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 
-
 export default function JoinPage() {
   const navigate = useNavigate();
   const [roomId, setRoomId] = useState("");
   const [username, setUsername] = useState("");
   const [selectedLanguage, setSelectedLanguage] = useState("");
+  const userId = localStorage.getItem("userId");
   const isLoggedIn = () => {
     return !!localStorage.getItem("token");
   };
@@ -31,6 +31,7 @@ export default function JoinPage() {
     navigate(`/editor/${id}`, {
       state: {
         username,
+        userId,
         language: selectedLanguage,
       },
     });
@@ -45,6 +46,7 @@ export default function JoinPage() {
     navigate(`/editor/${roomId}`, {
       state: {
         username,
+        userId,
         language: selectedLanguage,
       },
     });
@@ -62,7 +64,6 @@ export default function JoinPage() {
     navigate("/login");
   };
 
- 
   const goToSavedCodesButton = () => {
     navigate("/saved-codes");
   };
@@ -80,13 +81,13 @@ export default function JoinPage() {
       )}
 
       {isLoggedIn() && (
-         <button
-         onClick={goToSavedCodesButton}
-        //  className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded shadow"
-        className="absolute top-5 left-5 text-white bg-emerald-400 px-5 py-2 rounded hover:bg-emerald-500"
-       >
-         Saved Codes
-       </button>
+        <button
+          onClick={goToSavedCodesButton}
+          //  className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded shadow"
+          className="absolute top-5 left-5 text-white bg-emerald-400 px-5 py-2 rounded hover:bg-emerald-500"
+        >
+          Saved Codes
+        </button>
       )}
 
       <div className="w-full max-w-md space-y-8">
