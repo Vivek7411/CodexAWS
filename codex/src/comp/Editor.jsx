@@ -10,7 +10,6 @@ import ACTIONS from "../Actions";
 const Editor = ({ socketRef, roomId, onCodeChange, permission }) => {
   const editorRef = useRef(null);
 
-  // Initialize the editor once
   useEffect(() => {
     editorRef.current = Codemirror.fromTextArea(
       document.getElementById("realtimeEditor"),
@@ -20,9 +19,12 @@ const Editor = ({ socketRef, roomId, onCodeChange, permission }) => {
         autoCloseTags: true,
         autoCloseBrackets: true,
         lineNumbers: true,
-        readOnly: permission === "read", // initial readOnly
+        readOnly: permission === "read",
       }
     );
+
+    // Fullscreen the editor
+    editorRef.current.setSize("100%", "100vh");
 
     editorRef.current.on("change", (instance, changes) => {
       const { origin } = changes;
@@ -37,7 +39,6 @@ const Editor = ({ socketRef, roomId, onCodeChange, permission }) => {
     });
 
     return () => {
-      // Corrected ID name
       const editorElement = document.getElementById("realtimeEditor");
       if (editorElement && editorElement.parentNode) {
         editorElement.parentNode.removeChild(editorElement);
@@ -45,14 +46,12 @@ const Editor = ({ socketRef, roomId, onCodeChange, permission }) => {
     };
   }, []);
 
-  // Update editor's readOnly state when permission changes
   useEffect(() => {
     if (editorRef.current) {
       editorRef.current.setOption("readOnly", permission === "read");
     }
   }, [permission]);
 
-  // Listen to socket changes
   useEffect(() => {
     if (socketRef.current) {
       const handleCodeChange = ({ code }) => {
@@ -72,7 +71,7 @@ const Editor = ({ socketRef, roomId, onCodeChange, permission }) => {
     }
   }, [socketRef.current]);
 
-  return <textarea id="realtimeEditor"></textarea>;
+  return <textarea id="realtimeEditor" />;
 };
 
 export default Editor;

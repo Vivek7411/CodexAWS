@@ -1,12 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import logo from "../assets/code-logo.png";
-import {
-  useLocation,
-  useNavigate,
-  Navigate,
-  useParams,
-} from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 const SavedCodesPage = () => {
   const [codes, setCodes] = useState([]);
@@ -17,6 +12,7 @@ const SavedCodesPage = () => {
   const [searchText, setSearchText] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCode, setSelectedCode] = useState(null);
+
   const BURL = import.meta.env.VITE_BACKEND_URL || "http://localhost:3000";
   const userId = localStorage.getItem("userId");
   const reactNavigator = useNavigate();
@@ -53,13 +49,13 @@ const SavedCodesPage = () => {
   };
 
   const filteredCodes = codes.filter((code) => {
-    const formattedDate = new Date(code.createdAt).toISOString().split("T")[0]; // YYYY-MM-DD
+    const formattedDate = new Date(code.createdAt).toISOString().split("T")[0];
     return formattedDate.includes(searchQuery);
   });
 
   return (
     <div className="p-6 bg-black min-h-screen text-white">
-      <div className="flex items-center space-x-4">
+      <div className="flex items-center space-x-4 mb-6">
         <img
           src={logo}
           alt="Codex Logo"
@@ -68,9 +64,7 @@ const SavedCodesPage = () => {
           style={{ cursor: "pointer" }}
         />
         <h1 className="text-xl font-bold text-green-400">Saved Codes</h1>
-        
       </div>
-      <h1 className="text-2xl font-bold mb-6 text-green-400"></h1>
 
       <div className="flex flex-col sm:flex-row gap-4 mb-6">
         <input
@@ -105,21 +99,45 @@ const SavedCodesPage = () => {
       ) : filteredCodes.length === 0 ? (
         <div className="text-center text-gray-400">No saved code found.</div>
       ) : (
-        <div className="space-y-6">
-          {filteredCodes.map((code) => (
-            <div
-              key={code._id}
-              onClick={() => setSelectedCode(code)}
-              className="bg-gray-900 border border-green-600 rounded-lg p-4 shadow-md cursor-pointer hover:border-green-400 transition"
-            >
-              <div className="text-sm text-green-400 mb-2">
-                {new Date(code.createdAt).toLocaleString()}
-              </div>
-              <pre className="whitespace-pre-wrap text-green-300 text-sm overflow-x-auto max-h-32 truncate">
-                <code>{code.code}</code>
-              </pre>
-            </div>
-          ))}
+        <div className="overflow-x-auto">
+          <table className="min-w-full bg-gray-900 text-green-300 border border-green-600 rounded-md">
+            <thead>
+              <tr className="bg-green-700 text-white">
+                <th className="py-2 px-4 border-b border-green-500">Room ID</th>
+                <th className="py-2 px-4 border-b border-green-500">
+                  Created At
+                </th>
+                <th className="py-2 px-4 border-b border-green-500">
+                  Code Snippet
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {filteredCodes.map((code) => (
+                <tr key={code._id} className="hover:bg-gray-800 transition">
+                  <td
+                    className="py-2 px-4 border-b border-green-700 cursor-pointer hover:text-green-100"
+                    onClick={() => setSelectedCode(code)}
+                  >
+                    <code className="truncate inline-block max-w-[300px] overflow-hidden whitespace-nowrap text-ellipsis">
+                      {code.roomId}
+                    </code>
+                  </td>
+                  <td className="py-2 px-4 border-b border-green-700">
+                    {new Date(code.createdAt).toLocaleString()}
+                  </td>
+                  <td
+                    className="py-2 px-4 border-b border-green-700 cursor-pointer hover:text-green-100"
+                    onClick={() => setSelectedCode(code)}
+                  >
+                    <code className="truncate inline-block max-w-[300px] overflow-hidden whitespace-nowrap text-ellipsis">
+                      {code.code}
+                    </code>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       )}
 
@@ -132,7 +150,7 @@ const SavedCodesPage = () => {
             >
               ×
             </button>
-            <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-4 mb-4">
               <img
                 src={logo}
                 alt="Codex Logo"
@@ -140,10 +158,16 @@ const SavedCodesPage = () => {
                 onClick={() => reactNavigator("/")}
                 style={{ cursor: "pointer" }}
               />
-              <h1 className="text-xl font-bold">CODEX</h1>
+              <h1 className="text-xl font-bold text-green-300">CODEX</h1>
             </div>
             <div className="text-sm text-green-400 mb-2">
-              Created At: {new Date(selectedCode.createdAt).toLocaleString()}
+              Room ID: <span className="text-white">{selectedCode.roomId}</span>
+            </div>
+            <div className="text-sm text-green-400 mb-2">
+              Created At:{" "}
+              <span className="text-white">
+                {new Date(selectedCode.createdAt).toLocaleString()}
+              </span>
             </div>
             <pre className="whitespace-pre-wrap text-green-300 text-sm overflow-x-auto">
               <code>{selectedCode.code}</code>
