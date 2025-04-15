@@ -18,7 +18,7 @@ saveCodeRoute.post("/save-code", verifyToken, async (req, res) => {
       return res.status(404).json({ error: "Room not found" });
     }
 
-    const userId = req.user._id.toString();
+    const userId = req.user.id.toString();
     const isHost = room.userId.toString() === userId;
 
     const hasEditPermission = room.users?.some((user) => {
