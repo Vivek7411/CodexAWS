@@ -19,14 +19,17 @@ const Login = () => {
         email,
         password,
       });
+      console.log("Response : ", response);
+
       localStorage.setItem("token", response.data.token); // Save token to localStorage
-      localStorage.setItem("userId", response.data.user._id); // Save userId to localStorage
-      console.log("userId", response.data.user._id);
-      console.log("token", response.data.token);
+      localStorage.setItem("userId", response.data.user.id); // Save userId to localStorage
+
       navigate(from.pathname); // Navigate to the original page
       toast.success("Logged in successfully");
     } catch (err) {
-      console.log(err.response?.message || err.message || "Error in logging in");
+      console.log(
+        err.response?.message || err.message || "Error in logging in"
+      );
       toast.error("Invalid Credentials");
     }
   };
